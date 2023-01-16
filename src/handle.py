@@ -6,18 +6,18 @@ def get_list(string):
     pattern = re.compile(r'\d{1,2}\.\d{2,3}\.\d{2,3}\.\d{2,3}\-\d{1}')
     # remove numbers and dots and dash from string
     pattern_for_remove = re.compile(r"(\d+)+(.)+(-)+|(\d)")
-    
+
     try:
         code = re.findall(pattern, string)[0]
     except IndexError:
         code = ' '
-    
+
     try:
         name = re.sub(pattern, '', string).replace('"', '').strip()
         name = re.sub(pattern_for_remove, '', name)
     except IndexError:
-        name = ' '    
-    
+        name = ' '
+
     list = [code, name]
     return list
 
@@ -40,7 +40,7 @@ def line_by_line(new_file, old_file):
             new_data.loc[index, 'codigo'] = list_line[0]
             new_data.loc[index, 'nome'] = list_line[1]
     return save_csv(new_file, new_data)
-    
+
 def main():
     new_file = 'courses.csv'
     old_file = 'TabeladeAreasdoConhecimento.csv'
