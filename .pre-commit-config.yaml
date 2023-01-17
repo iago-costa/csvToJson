@@ -3,16 +3,23 @@ repos:
     rev: v4.4.0
     hooks:
       - id: no-commit-to-branch
+        stages: [commit]
       - id: trailing-whitespace
+        stages: [commit]
       - id: end-of-file-fixer
+        stages: [commit]
       - id: check-yaml
+        stages: [commit]
       - id: check-json
+        stages: [commit]
       - id: check-added-large-files
+        stages: [commit]
       - id: check-case-conflict
+        stages: [commit]
       - id: requirements-txt-fixer
+        stages: [commit]
       - id: name-tests-test
-    stages:
-      [commit]
+        stages: [commit]
       # no-commit-to-branch: Prevents commits to specific branches.
       # trailing-whitespace: Trims trailing whitespace.
       # end-of-file-fixer: Makes sure files end in a newline and only a newline.
