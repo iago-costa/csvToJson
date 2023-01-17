@@ -1,13 +1,17 @@
 #!/bin/bash
 
 MESSAGE="$(cat $1)"
-echo "Commit message: $MESSAGE"
+# echo "Commit message: $MESSAGE"
 PATTERN_CONVENTIONAL_NAMING="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
 
-if ! [[ $MESSAGE =~ ^.{0,99}$ ]]; then
+if ! [[ $MESSAGE =~ ^.{0,99}$ ]]
+then
     echo "Invalid commit message. Keep the message less than 99 characters."
-    exit 3
-elif ! [[ $MESSAGE =~ ^($PATTERN_CONVENTIONAL_NAMING):.*$ ]]; then
+    exit 1
+fi
+
+if ! [[ $MESSAGE =~ ^($PATTERN_CONVENTIONAL_NAMING):.*$ ]]
+then
     echo "Invalid commit message. Please use conventional commit messages followeb by a colon. Example -> feat: add new feature"
     exit 1
 fi
