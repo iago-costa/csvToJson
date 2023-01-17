@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -a
+source .env
+set +a
+
+PULL_REQUEST_TEMPLATE=$(cat ./.github/PULL_REQUEST_TEMPLATE.md)
+
+# Get the current branch name
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Check if a pull request already exists for the current branch
+pull_request_exists=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/OWNER/REPO/pulls?head=OWNER:$branch | jq '.[].head.ref' | grep $branch)
+
+# If the pull request does not exist, create a new one
+if [ -z "$pull_request_exists" ]; then
+    curl -H "Authorization: token $TOKEN" -X POST -d '{"title": "New pull request from '$branch'","head": "'$branch'","base": "main", "body": "'$PULL_REQUEST_TEMPLATE'"}' https://api.github.com/repos/OWNER/REPO/pulls
+fi

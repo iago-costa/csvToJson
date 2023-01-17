@@ -99,7 +99,7 @@ repos:
       - id: script
         name: prepare-files
         language: system
-        entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && git add ."
+        entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && chmod +x ./.git-hooks/create-pull-request && git add ."
         stages: [commit]
 
       - id: pre-commit
@@ -113,3 +113,9 @@ repos:
         language: system
         entry: sh ./.git-hooks/commit-msg
         stages: [commit-msg]
+
+    # -   id: create-pull-request
+    #     name: create-pull-request
+    #     language: system
+    #     entry: sh ./.git-hooks/create-pull-request
+    #     stages: [pre-push]

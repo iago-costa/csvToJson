@@ -39,6 +39,8 @@ pre-commit install --hook-type commit-msg
 # install pre-Commit for prepare-commit-msg
 pre-commit install --hook-type prepare-commit-msg
 
+# install pre-Commit for pre-push
+
 # run pre-Commit
 pre-commit run --all-files
 
