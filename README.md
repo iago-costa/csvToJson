@@ -33,6 +33,12 @@ pip install pre-commit
 # install pre-Commit
 pre-commit install
 
+# install pre-Commit for commit-msg
+pre-commit install --hook-type commit-msg
+
+# install pre-Commit for prepare-commit-msg
+pre-commit install --hook-type prepare-commit-msg
+
 # run pre-Commit
 pre-commit run --all-files
 
