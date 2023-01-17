@@ -3,7 +3,7 @@ name: Python Package using pip
 on: [push]
 
 jobs:
-  linting-and-testing:
+  linting:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
@@ -34,7 +34,29 @@ jobs:
           #   W0703: Catching too general exception Exception
           #   E0401: Unable to import 'module'
           #   C0114: Missing module docstring
-          pylint --rcfile=.pylintrc --output-format=colorized --reports=n --score=n --disable=W0703,E0401,C0114
+          pylint . --recursive=y --output-format=colorized --reports=n --score=n --disable=W0703,E0401,C0114,E0401
+
+      - name: Lint with Black
+        run: |
+          black --check --diff --color .
+
+  testing:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Pip install dependencies
+        run: |
+          pip install -r requirements.txt
 
       - name: Test with unittest
         run: |
