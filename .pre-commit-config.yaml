@@ -125,5 +125,7 @@ repos:
       - id: create-pull-request
         name: create-pull-request
         language: system
-        entry: sh ./.git-hooks/create-pull-request
-        stages: [manual]
+        entry: bash -c "set -a source .env set +a && sh ./.git-hooks/create-pull-request"
+        # source .env
+        args: [source, .env]
+        stages: [manual, commit]
