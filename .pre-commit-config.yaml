@@ -128,4 +128,4 @@ repos:
         entry: bash -c "set -a source .env set +a && sh ./.git-hooks/create-pull-request"
         # source .env
         args: [source, .env]
-        stages: [manual, commit]
+        stages: [commit]
