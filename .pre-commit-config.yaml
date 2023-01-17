@@ -9,6 +9,8 @@ repos:
       - id: check-json
       - id: check-added-large-files
       - id: check-case-conflict
+      - id: requirements-txt-fixer
+      - id: name-tests-test
       # no-commit-to-branch: Prevents commits to specific branches.
       # trailing-whitespace: Trims trailing whitespace.
       # end-of-file-fixer: Makes sure files end in a newline and only a newline.
