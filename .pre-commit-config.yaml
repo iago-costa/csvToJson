@@ -76,4 +76,5 @@ repos:
     rev: v3.0.0-alpha.4
     hooks:
       - id: prettier
-        args: [--write]
+        args: [--write, --ignore-path=.gitignore, --ignore-path='*.html']
+        # args: [--write, --ignore-path=.gitignore, --ignore-path=node_modules/**/*, --ignore-path=coverage/**/*, --ignore-path=dist/**/*]
