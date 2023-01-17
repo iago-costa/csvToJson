@@ -5,6 +5,7 @@ source .env
 set +a
 
 PULL_REQUEST_TEMPLATE=$(cat ./.github/PULL_REQUEST_TEMPLATE.md)
+echo "Pull request template: $PULL_REQUEST_TEMPLATE"
 
 # Get the current branch name
 branch=$(git rev-parse --abbrev-ref HEAD)
