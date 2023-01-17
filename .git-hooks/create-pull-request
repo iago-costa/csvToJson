@@ -18,9 +18,10 @@ echo "Pull request template: $PULL_REQUEST_TEMPLATE"
 branch=$(git rev-parse --abbrev-ref HEAD)
 
 # Check if a pull request already exists for the current branch
-pull_request_exists=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/OWNER/REPO/pulls?head=OWNER:$branch | jq '.[].head.ref' | grep $branch)
+pull_request_exists=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/$OWNER/$REPO/pulls?head=$OWNER:$branch | jq '.[].head.ref' | grep $branch)
 
 LINK="https://api.github.com/repos/$OWNER/$REPO/pulls"
+echo "Link: $LINK"
 BODY_REQUEST={"title":"New pull request from '$branch'","body":"'$PULL_REQUEST_TEMPLATE'","head":"'$branch'","base":"main"}
 echo "Body request: $BODY_REQUEST"
 
