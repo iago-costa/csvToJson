@@ -101,6 +101,45 @@ repos:
         stages: [commit]
         # args: [--write, --ignore-path=.gitignore, --ignore-path=node_modules/**/*, --ignore-path=coverage/**/*, --ignore-path=dist/**/*]
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          [
+            --ignore=E401,
+            --max-line-length=120,
+            --exclude=*/migrations/*,
+            --max-complexity=10,
+          ]
+        stages: [commit]
+        # --ignore=E401: Ignores the "multiple imports on one line" error.
+        # --max-line-length=120: Specifies the maximum line width for the code.
+        # --exclude=*/migrations/*: Exclude the migrations files from being checked.
+        # --max-complexity=10: Specifies the maximum McCabe complexity for functions.
+        # --extend-ignore=F401: Ignores the "imported but unused" error.
+        # --extend-ignore=F821: Ignores the "undefined name" error.
+        # --extend-ignore=F841: Ignores the "already defined" error.
+
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        name: Remove unused variables and imports
+        entry: bash -c 'autoflake "$@"; git add -u' --
+        language: python
+        args:
+          [
+            "--in-place",
+            "--recursive",
+            "--remove-all-unused-imports",
+            "--remove-unused-variables",
+            "--expand-star-imports",
+            "--ignore-init-module-imports",
+          ]
+        files: \.py$
+        stages: [commit]
+
   - repo: local
     hooks:
       - id: script
@@ -113,19 +152,18 @@ repos:
       - id: pre-commit
         name: pre-commit
         language: system
-        entry: sh ./.git-hooks/pre-commit
+        entry: ./.git-hooks/pre-commit
         stages: [commit-msg]
 
       - id: commit-msg
         name: commit-msg
         language: system
-        entry: sh ./.git-hooks/commit-msg
+        entry: ./.git-hooks/commit-msg
         stages: [commit-msg]
 
       - id: create-pull-request
         name: create-pull-request
         language: system
-        entry: bash -c "set -a source .env set +a && sh ./.git-hooks/create-pull-request"
-        # source .env
+        entry: bash -c "set -a source .env set +a && ./.git-hooks/create-pull-request"
         args: [source, .env]
         stages: [commit, manual]
