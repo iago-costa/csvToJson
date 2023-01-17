@@ -125,4 +125,4 @@ repos:
         name: create-pull-request
         language: system
         entry: sh ./.git-hooks/create-pull-request
-        stages: [push]
+        stages: [post-commit]
