@@ -5,4 +5,5 @@ updates:
     directory: "/"
     # Check for updates once a week
     schedule:
-      interval: "daily"
+      # interval: "daily"
+      interval: "5"
