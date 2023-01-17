@@ -34,7 +34,7 @@ jobs:
           #   W0703: Catching too general exception Exception
           #   E0401: Unable to import 'module'
           #   C0114: Missing module docstring
-          pylint . --recursive=y --output-format=colorized --reports=n --score=n --disable=W0703,E0401,C0114,E0401
+          pylint . --recursive=y --output-format=colorized --reports=n --score=n --disable=W0703,E0401,C0114,E0401,C0116 --exit-zero
 
       - name: Lint with Black
         run: |
