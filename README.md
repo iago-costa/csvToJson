@@ -51,3 +51,9 @@ pre-commit run --all-files --verbose --show-diff-on-failure
 pre-commit run --all-files --verbose --show-diff-on-failure --no-cache
 
 ```
+
+### Create pull request with hooks
+
+```shell
+pre-commit run create-pull-request
+```

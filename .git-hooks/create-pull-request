@@ -38,5 +38,3 @@ else
     echo "Pull request already exists"
     exit 0
 fi
-
-exit 1
