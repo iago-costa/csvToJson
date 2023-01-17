@@ -33,14 +33,19 @@ def save_csv(file, data):
     return data
 
 
-def line_by_line(new_file, old_file):
-    old_data = read_csv(old_file)
+def new_data_for_csv(old_data):
     new_data = pandas.DataFrame()
     for index, row in enumerate(old_data):
         if index != 0:
             list_line = get_list(row)
             new_data.loc[index, "codigo"] = list_line[0]
             new_data.loc[index, "nome"] = list_line[1]
+    return new_data
+
+
+def line_by_line(new_file, old_file):
+    old_data = read_csv(old_file)
+    new_data = new_data_for_csv(old_data)
     return save_csv(new_file, new_data)
 
 
