@@ -96,16 +96,17 @@ repos:
 
   - repo: local
     hooks:
-      # - id: script
-      #   name: prepare-files
-      #   language: system
-      #   entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && git add ."
+      - id: script
+        name: prepare-files
+        language: system
+        entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && git add ."
+        stages: [commit]
 
       - id: pre-commit
         name: pre-commit
         language: system
         entry: sh ./.git-hooks/pre-commit
-        stages: [commit]
+        stages: [commit-msg]
 
       - id: commit-msg
         name: commit-msg
