@@ -1,0 +1,39 @@
+#!/bin/sh
+
+echo "PWD: $PWD"
+
+set -a
+source "$PWD/.env"
+set +a
+
+PULL_REQUEST_TEMPLATE=$(cat ./.github/PULL_REQUEST_TEMPLATE.md)
+echo "Pull request template: $PULL_REQUEST_TEMPLATE"
+
+# Get username git config
+OWNER=$(git config user.name)
+echo "Owner: $OWNER"
+
+# Get repository name
+REPO=$(basename -s .git `git config --get remote.origin.url`)
+echo "Pull request template: $PULL_REQUEST_TEMPLATE"
+
+# Get the current branch name
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+echo "Branch: $BRANCH"
+
+LINK="https://api.github.com/repos/$OWNER/$REPO/pulls"
+echo "Link: $LINK"
+
+# Check if a pull request already exists for the current branch
+PULL_REQUEST_EXISTS=$(curl -s -H "Authorization: token $TOKEN" $LINK?head=$OWNER:$BRANCH | jq '.[].head.ref' | grep $BRANCH)
+echo "Pull request exists: $PULL_REQUEST_EXISTS"
+
+# If the pull request does not exist, create a new one
+if [ -z "$PULL_REQUEST_EXISTS" ]; then
+    RESULT=$(curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" -d '{"title":"New pull request","body":"Context of new pull request","head":"'$BRANCH'","base":"main"}' https://api.github.com/repos/$OWNER/$REPO/pulls)
+    echo "Result: $RESULT"
+else
+    echo "Pull request already exists"
+fi
+
+exit 0

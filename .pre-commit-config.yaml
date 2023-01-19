@@ -3,14 +3,23 @@ repos:
     rev: v4.4.0
     hooks:
       - id: no-commit-to-branch
+        stages: [commit]
       - id: trailing-whitespace
+        stages: [commit]
       - id: end-of-file-fixer
+        stages: [commit]
       - id: check-yaml
+        stages: [commit]
       - id: check-json
+        stages: [commit]
       - id: check-added-large-files
+        stages: [commit]
       - id: check-case-conflict
+        stages: [commit]
       - id: requirements-txt-fixer
+        stages: [commit]
       - id: name-tests-test
+        stages: [commit]
       # no-commit-to-branch: Prevents commits to specific branches.
       # trailing-whitespace: Trims trailing whitespace.
       # end-of-file-fixer: Makes sure files end in a newline and only a newline.
@@ -18,13 +27,13 @@ repos:
       # check-json: Checks for invalid JSON syntax.
       # check-added-large-files: Prevents adding files larger than a certain size.
       # check-case-conflict: Prevents adding files that would conflict in case-insensitive filesystems.
-      # markdownlint: Checks for Markdown style and correctness.
 
   - repo: https://github.com/pre-commit/mirrors-autopep8
     rev: v2.0.1
     hooks:
       - id: autopep8
         args: [--in-place, --recursive, --exclude=*.txt, --max-line-length=500]
+        stages: [commit]
       # args: [--in-place, --recursive, --exclude=*.txt, --max-line-length=100, --ignore=E402, --ignore=W503]
       # --in-place (To save changes to the original file),
       # --recursive (To process subdirectorial files),
@@ -36,6 +45,7 @@ repos:
     rev: 22.12.0
     hooks:
       - id: black
+        stages: [commit]
 
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
@@ -48,6 +58,7 @@ repos:
             --exclude=*/migrations/*,
             --max-complexity=10,
           ]
+        stages: [commit]
         # --ignore=E401: Ignores the "multiple imports on one line" error.
         # --max-line-length=120: Specifies the maximum line width for the code.
         # --exclude=*/migrations/*: Exclude the migrations files from being checked.
@@ -68,6 +79,7 @@ repos:
             --use-parentheses,
             --line-width=100,
           ]
+        stages: [commit]
         # --multi-line=3: Specifies that imports with more than 3 modules should be put on separate lines.
         # --trailing-comma: Adds a trailing comma at the end of the imports
         # --force-grid-wrap=0: Forces imports to be wrapped in a grid-like format
@@ -78,5 +90,91 @@ repos:
     rev: v3.0.0-alpha.4
     hooks:
       - id: prettier
-        args: [--write, --ignore-path=.gitignore, --ignore-path='*.html']
+        args:
+          [
+            --write,
+            --ignore-path='.gitignore',
+            --ignore-path='*.html',
+            --ignore-path='./.git-hooks',
+            --ignore-path='./.git/*',
+          ]
+        stages: [commit]
         # args: [--write, --ignore-path=.gitignore, --ignore-path=node_modules/**/*, --ignore-path=coverage/**/*, --ignore-path=dist/**/*]
+
+  - repo: https://github.com/ambv/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+        name: Black Python code formatting
+        entry: bash -c 'black "$@"; git add -u' --
+        language: python
+        types: [python]
+        args: ["--line-length=120"]
+        stages: [commit]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          [
+            --ignore=E401,
+            --max-line-length=120,
+            --exclude=*/migrations/*,
+            --max-complexity=10,
+          ]
+        stages: [commit]
+        # --ignore=E401: Ignores the "multiple imports on one line" error.
+        # --max-line-length=120: Specifies the maximum line width for the code.
+        # --exclude=*/migrations/*: Exclude the migrations files from being checked.
+        # --max-complexity=10: Specifies the maximum McCabe complexity for functions.
+        # --extend-ignore=F401: Ignores the "imported but unused" error.
+        # --extend-ignore=F821: Ignores the "undefined name" error.
+        # --extend-ignore=F841: Ignores the "already defined" error.
+
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        name: Remove unused variables and imports
+        entry: bash -c 'autoflake "$@"; git add -u' --
+        language: python
+        args:
+          [
+            "--in-place",
+            "--recursive",
+            "--remove-all-unused-imports",
+            "--remove-unused-variables",
+            "--expand-star-imports",
+            "--ignore-init-module-imports",
+          ]
+        files: \.py$
+        stages: [commit]
+
+  - repo: local
+    hooks:
+      - id: script
+        name: prepare-files
+        language: system
+        # entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && chmod +x ./.git-hooks/create-pull-request && git add ."
+        entry: bash -c "chmod +x ./.git-hooks/pre-commit && chmod +x ./.git-hooks/commit-msg && chmod +x ./.git-hooks/create-pull-request"
+        stages: [commit]
+
+      - id: pre-commit
+        name: pre-commit
+        language: system
+        entry: ./.git-hooks/pre-commit
+        stages: [commit-msg]
+
+      - id: commit-msg
+        name: commit-msg
+        language: system
+        entry: ./.git-hooks/commit-msg
+        stages: [commit-msg]
+
+      - id: create-pull-request
+        name: create-pull-request
+        language: system
+        entry: bash -c "set -a source .env set +a && ./.git-hooks/create-pull-request"
+        args: [source, .env]
+        stages: [commit, manual]

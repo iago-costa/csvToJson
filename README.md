@@ -33,6 +33,14 @@ pip install pre-commit
 # install pre-Commit
 pre-commit install
 
+# install pre-Commit for commit-msg
+pre-commit install --hook-type commit-msg
+
+# install pre-Commit for prepare-commit-msg
+pre-commit install --hook-type prepare-commit-msg
+
+# install pre-Commit for pre-push
+
 # run pre-Commit
 pre-commit run --all-files
 
@@ -42,4 +50,10 @@ pre-commit run --all-files --verbose --show-diff-on-failure
 # Run pre-Commit with debug and without cache
 pre-commit run --all-files --verbose --show-diff-on-failure --no-cache
 
+```
+
+### Create pull request with hooks
+
+```shell
+pre-commit run create-pull-request
 ```

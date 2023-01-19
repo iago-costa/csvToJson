@@ -1,0 +1,42 @@
+#!/bin/bash
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+FIRST_PART_PATTERN_1="[a-zA-Z]+"
+FIRST_PART_PATTERN_2="[a-zA-Z]+-[a-zA-Z]+"
+SECOND_PART_PATTERN_CONVENTIONAL_NAMING="bugfix|hotfix|feature|experimental|wip|qa"
+THIRD_PART_PATTERN_1="[a-zA-Z]+"
+THIRD_PART_PATTERN_2="[a-zA-Z]+-[a-zA-Z]+"
+THIRD_PART_PATTERN_3="[a-zA-Z]+-[a-zA-Z]+-[a-zA-Z]+"
+REGEX="^($FIRST_PART_PATTERN_1|$FIRST_PART_PATTERN_2)\/($SECOND_PART_PATTERN_CONVENTIONAL_NAMING)\/($THIRD_PART_PATTERN_1|$THIRD_PART_PATTERN_2|$THIRD_PART_PATTERN_3)$"
+
+# echo "Branch name: $BRANCH"
+# echo "Regex: $REGEX"
+
+if ! [[ $BRANCH =~ $REGEX ]]
+then
+  echo "Your commit was rejected due to branching name. Please rename your branch with the following format: first-part/second-part/third-part. More informations access the git output."
+  echo "first-part/second-part/third-part"
+  echo "first-part: [a-zA-Z]+ or [a-zA-Z]+-[a-zA-Z]+"
+  echo "second-part: $SECOND_PART_PATTERN_CONVENTIONAL_NAMING"
+  echo "third-part: [a-zA-Z]+ or [a-zA-Z]+-[a-zA-Z]+ or [a-zA-Z]+-[a-zA-Z]+-[a-zA-Z]+"
+  echo ""
+  echo "Example:"
+  echo "username/feature/feature-name"
+  echo "username/bugfix/bugfix-name"
+  echo "username/hotfix/hotfix-name"
+  echo "username/experimental/experimental-name"
+  echo "username/wip/wip-name"
+  echo ""
+  echo "==============================================================="
+  exit 1
+fi
+
+# Activate the hooks:
+# chmod +x ./.git-hooks/pre-commit
+
+
+# apagar todas as pastas com nome __pycache__ do projeto recursivamente
+find . -name "__pycache__" -type d -exec rm -rf {} \;
+# without find
+# rm -rf **/__pycache__
