@@ -18,7 +18,8 @@ on:
     # The branches below must be a subset of the branches above
     branches: [main]
   schedule:
-    - cron: "33 15 * * 5"
+    # executar toda terça feira às 6 horas da manhã
+    - cron: "0 6 * * 2"
 
 jobs:
   analyze:
