@@ -101,6 +101,17 @@ repos:
         stages: [commit]
         # args: [--write, --ignore-path=.gitignore, --ignore-path=node_modules/**/*, --ignore-path=coverage/**/*, --ignore-path=dist/**/*]
 
+  - repo: https://github.com/ambv/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+        name: Black Python code formatting
+        entry: bash -c 'black "$@"; git add -u' --
+        language: python
+        types: [python]
+        args: ["--line-length=120"]
+        stages: [commit]
+
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
     hooks:
