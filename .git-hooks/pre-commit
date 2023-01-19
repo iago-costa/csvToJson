@@ -33,5 +33,10 @@ then
 fi
 
 # Activate the hooks:
-# git config core.hooksPath .git-hooks
 # chmod +x ./.git-hooks/pre-commit
+
+
+# apagar todas as pastas com nome __pycache__ do projeto recursivamente
+find . -name "__pycache__" -type d -exec rm -rf {} \;
+# without find
+# rm -rf **/__pycache__
